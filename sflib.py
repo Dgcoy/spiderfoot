@@ -1485,6 +1485,7 @@ class SpiderFoot:
         answers = res.query(name)
         tmplist.append(str(answers.rrset.items[0]))
         resp = tuple((name,tmplist2,tmplist))
+        self.info(resp)
         return(resp)
 
     def resolveHost(self, host):
