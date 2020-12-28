@@ -31,6 +31,8 @@ import uuid
 from copy import deepcopy
 from datetime import datetime
 
+
+
 import cryptography
 import dns.resolver
 import netaddr
@@ -48,6 +50,7 @@ from stem.control import Controller
 # For hiding the SSL warnings coming from the requests lib
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)  # noqa: DUO131
 
+nameservers = ["8.8.8.8","8.8.4.4","1.1.1.1","1.0.0.1","208.67.222.222"]
 
 class SpiderFoot:
     """SpiderFoot
@@ -1469,6 +1472,21 @@ class SpiderFoot:
 
         return {"name": root, "children": get_children(root, data)}
 
+    def dnsresolver(self,name):
+        res = dns.resolver.Resolver()
+        ns = random.choice(nameservers)
+        nsls = []
+        nsls.append(ns)
+        res.nameservers = nsls
+        resp = ()
+
+        tmplist = []
+        tmplist2 = []
+        answers = res.query(name)
+        tmplist.append(str(answers.rrset.items[0]))
+        resp = tuple((name,tmplist2,tmplist))
+        return(resp)
+
     def resolveHost(self, host):
         """Return a normalised resolution of a hostname.
 
@@ -1484,7 +1502,8 @@ class SpiderFoot:
             return list()
 
         try:
-            addrs = self.normalizeDNS(socket.gethostbyname_ex(host))
+
+            addrs = self.normalizeDNS(self.dnsresolver(host))
         except BaseException as e:
             self.debug(f"Unable to resolve host: {host} ({e})")
             return list()

@@ -36,7 +36,8 @@ class sfp_dnsbrute(SpiderFootPlugin):
         "top10000": False,
         "numbersuffix": True,
         "numbersuffixlimit": True,
-        "_maxthreads": 100
+        "_maxthreads": 100,
+        "DNS_Servers": "8.8.8.8"
     }
 
     # Option descriptions
@@ -47,7 +48,9 @@ class sfp_dnsbrute(SpiderFootPlugin):
         'top10000': "Try a further 10,000 common hostnames/sub-domains. Will make the scan much slower.",
         'numbersuffix': "For any host found, try appending 1, 01, 001, -1, -01, -001, 2, 02, etc. (up to 10)",
         'numbersuffixlimit': "Limit using the number suffixes for hosts that have already been resolved? If disabled this will significantly extend the duration of scans.",
-        "_maxthreads": "Maximum threads"
+        "_maxthreads": "Maximum threads",
+        "DNS_Servers": "DNS Servers to use for enumeration. Separate with ,"
+
     }
 
     events = None
