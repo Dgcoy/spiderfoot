@@ -34,9 +34,10 @@ class sfp_dnsbrute(SpiderFootPlugin):
         "domainonly": True,
         "commons": True,
         "top10000": False,
+        "top50000": False,
         "numbersuffix": True,
         "numbersuffixlimit": True,
-        "_maxthreads": 100,
+        "_maxthreads": 1,
         "DNS_Servers": "8.8.8.8"
     }
 
@@ -46,6 +47,7 @@ class sfp_dnsbrute(SpiderFootPlugin):
         'domainonly': "Only attempt to brute-force names on domain names, not hostnames (some hostnames are also sub-domains).",
         'commons': "Try a list of about 750 common hostnames/sub-domains.",
         'top10000': "Try a further 10,000 common hostnames/sub-domains. Will make the scan much slower.",
+        'top50000': "Try a further 50,000 common hostnames/sub-domains. Will make the scan much slower. List is Based of Haddix's all domains",
         'numbersuffix': "For any host found, try appending 1, 01, 001, -1, -01, -001, 2, 02, etc. (up to 10)",
         'numbersuffixlimit': "Limit using the number suffixes for hosts that have already been resolved? If disabled this will significantly extend the duration of scans.",
         "_maxthreads": "Maximum threads",
@@ -78,6 +80,13 @@ class sfp_dnsbrute(SpiderFootPlugin):
         ttlines = list()
         if self.opts['top10000']:
             tt = open(self.sf.myPath() + "/dicts/subdomains-10000.txt", 'r')
+            ttlines = tt.readlines()
+            for s in ttlines:
+                s = s.strip()
+                self.sublist[s] = True
+
+        if self.opts['top50000']:
+            tt = open(self.sf.myPath() + "/dicts/subdomains-50000.txt", 'r')
             ttlines = tt.readlines()
             for s in ttlines:
                 s = s.strip()
