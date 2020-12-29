@@ -1473,7 +1473,6 @@ class SpiderFoot:
         return {"name": root, "children": get_children(root, data)}
 
     def dnsresolver(self,name):
-        print(name)
         res = dns.resolver.Resolver()
         ns = random.choice(nameservers)
         nsls = []
@@ -1487,7 +1486,6 @@ class SpiderFoot:
         var1 = list(answers.rrset.items)[0]
         tmplist.append(str(var1))
         resp = tuple((name,tmplist2,tmplist))
-        self.info(str(resp))
         return(resp)
 
     def resolveHost(self, host):
@@ -1504,12 +1502,13 @@ class SpiderFoot:
             self.error(f"Unable to resolve host: {host} (Invalid host)")
             return list()
 
-        #try:
+        try:
 
-        addrs = self.normalizeDNS(self.dnsresolver(host))
-      #  except BaseException as e:
-       #     self.debug(f"Unable to resolve host: {host} ({e})")
-        #    return list()
+            addrs = self.normalizeDNS(self.dnsresolver(host))
+
+        except BaseException as e:
+            self.debug(f"Unable to resolve host: {host} ({e})")
+            return list()
 
         if not addrs:
             self.debug(f"Unable to resolve host: {host}")
@@ -2831,10 +2830,10 @@ class SpiderFoot:
         randpool = 'bcdfghjklmnpqrstvwxyz3456789'
         randhost = ''.join([random.SystemRandom().choice(randpool) for x in range(10)])
 
-      #  if not self.resolveHost(randhost + "." + target):
-        return False
+        if not self.resolveHost(randhost + "." + target):
+            return False
 
-       # return True
+        return True
 
     def googleIterate(self, searchString, opts={}):
         """Request search results from the Google API.
